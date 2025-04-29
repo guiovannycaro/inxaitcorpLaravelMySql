@@ -1,0 +1,69 @@
+
+CREATE TABLE pais (
+    idPais INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(100) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabla departamento
+CREATE TABLE departamento (
+    idDepartamento INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    PaisId INT,
+    estado BOOLEAN,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (PaisId) REFERENCES pais(idPais)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabla ciudad
+CREATE TABLE ciudad (
+    idCiudad INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    DepartamentoId INT,
+    estado BOOLEAN,
+	  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (DepartamentoId) REFERENCES departamento(idDepartamento)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabla tipo documento
+CREATE TABLE tipodocumento (
+    idTipodocumento INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(100) NOT NULL,
+    estado BOOLEAN,
+	  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabla clientes
+CREATE TABLE clientes (
+    idCliente INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    tipoDocumento_id INT,
+    numeroDocumento BIGINT,
+    ciudadId INT,
+    telefono VARCHAR(20) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    fechaCreacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    habeasData BOOLEAN,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (tipoDocumento_id) REFERENCES tipodocumento(idTipodocumento),
+    FOREIGN KEY (ciudadId) REFERENCES ciudad(idCiudad)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE ganadores (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    cliente_id INT NOT NULL,
+    fecha_ganado DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(idCliente) ON DELETE CASCADE
+);
+
+;
